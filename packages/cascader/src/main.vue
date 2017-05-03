@@ -107,6 +107,12 @@ export default {
         };
       }
     },
+    beginValue: {
+      type: String,
+      default() {
+        return '';
+      }
+    },
     value: {
       type: Array,
       default() {
@@ -212,6 +218,7 @@ export default {
       this.menu.$on('pick', this.handlePick);
       this.menu.$on('activeItemChange', this.handleActiveItemChange);
       this.menu.$on('menuLeave', this.doDestroy);
+      this.menu.$on('menuLeave', this.ifNullSetBegin);
     },
     showMenu() {
       if (!this.menu) {
@@ -240,6 +247,8 @@ export default {
       this.currentValue = value;
       this.$emit('input', value);
       this.$emit('change', value);
+
+      this.$emit('cascaderChange', { 'value': value[value.length - 1], 'label': this.currentLabels[this.currentLabels.length - 1]});
 
       if (close) {
         this.menuVisible = false;
@@ -323,6 +332,11 @@ export default {
         return;
       }
       this.menuVisible = !this.menuVisible;
+    },
+    ifNullSetBegin() {
+      if (this.currentValue.length === 0) {
+        this.$refs.input.$refs.input.value = this.beginValue;
+      }
     }
   },
 
@@ -334,6 +348,7 @@ export default {
 
   mounted() {
     this.flatOptions = this.flattenOptions(this.options);
+    this.ifNullSetBegin();
   }
 };
 </script>

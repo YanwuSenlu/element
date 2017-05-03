@@ -78,12 +78,14 @@
         } else {
           this.activeValue = [item.value];
         }
+        // this.$emit('pick', {label:item.label,value:item.value});
         this.$emit('pick', this.activeValue);
       },
       handleMenuLeave() {
         this.$emit('menuLeave');
       },
       activeItem(item, menuIndex) {
+        console.log(item);
         const len = this.activeOptions.length;
         this.activeValue.splice(menuIndex, len, item.value);
         this.activeOptions.splice(menuIndex + 1, len, item.children);
